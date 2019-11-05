@@ -1,0 +1,1300 @@
+drop schema if exists farmacia;
+create schema farmacia;
+use farmacia;
+
+CREATE TABLE cidades (
+
+id_cid int not null auto_increment,
+nome varchar (50),
+UF char(2),
+primary key (id_cid)
+
+); 
+
+CREATE TABLE categorias (
+
+id_categoria int not null auto_increment,
+nome varchar(50),
+primary key(id_categoria)
+
+);
+
+CREATE TABLE clientes (
+
+id_cliente int not null auto_increment primary key,
+nome varchar(100) not null,
+data_nas date,
+responsavel varchar(80),
+rua varchar(30),
+numero varchar(45),
+complemento varchar (45),
+CPF varchar(14),
+id_cid int,
+telefone varchar(25),
+email varchar(80),
+foreign key(id_cid) references cidades(id_cid)
+);
+
+
+
+CREATE TABLE funcionarios (
+id_funcionario int not null auto_increment primary key,
+nome varchar(35),
+data_nas date,
+email varchar(60),
+cpf varchar(14),
+id_cid int,
+telefone varchar(25),
+salario double,
+datacontratacao date,
+foreign key(id_cid) references cidades (id_cid)
+);
+
+CREATE TABLE tipos (
+id_tipo int not null auto_increment,
+nome varchar(70) not null, 
+primary key(id_tipo)
+);
+
+
+CREATE TABLE laboratorios (
+id_laboratorio int not null auto_increment,
+id_cid int not null,
+nome varchar(50) not null,
+rua varchar(30),
+numero varchar(10),
+complemento varchar(45),
+telefone char(25) not null,
+email varchar(80),
+site varchar(80),
+primary key(id_laboratorio),
+foreign key (id_cid) references cidades (id_cid)
+);
+
+ describe laboratorios;
+
+CREATE TABLE medicamentos (
+id_medicamento int not null auto_increment primary key,
+nome varchar(80) not null,
+valor double not null,
+quantidade int not null,
+id_categoria int,
+id_laboratorio int,
+id_tipo int,
+foreign key(id_categoria) references categorias(id_categoria),
+foreign key(id_laboratorio) references laboratorios(id_laboratorio),
+foreign key(id_tipo) references tipos(id_tipo)
+);
+
+-- FAÇA AS ALTERAÇÕES NO BANCO DE DADOS;
+-- OS COMANDOS ABAIXO FAZEM PARTE DA DDL 
+
+ALTER TABLE Clientes
+ADD estado_civil VARCHAR(12);
+
+ALTER TABLE Clientes
+ADD registro_geral VARCHAR (20); -- ADICIONANDO RG
+
+select * from Clientes;
+
+
+ALTER TABLE categorias
+ADD observacoes VARCHAR(80); -- ADICIONANDO OBS
+
+ALTER TABLE funcionarios
+ADD rua VARCHAR (45); -- ADICIONANDO RUA
+
+select * from funcionarios;
+
+ALTER TABLE funcionarios
+ADD numero VARCHAR(25);
+
+select * from funcionarios;
+
+ALTER TABLE funcionarios
+ADD complemento varchar(25);
+
+select * from funcionarios ;
+
+ALTER TABLE funcionarios
+ADD estado_civil VARCHAR(12);
+
+ALTER TABLE tipos 
+ADD descricao VARCHAR(500);
+
+-- REMOVER
+
+ALTER TABLE Clientes
+DROP estado_civil;
+
+select * from Clientes;
+
+ALTER TABLE categorias
+DROP observacoes;
+
+
+SHOW TABLES;
+
+-- A SEGUIR OS PRÓXIMOS COMANDOS SÃO DA DML
+
+DESCRIBE cidades;
+
+INSERT INTO Cidades VALUES (1, "Londrina","PR");
+INSERT INTO Cidades VALUES (2, "Maringá","PR");
+INSERT INTO Cidades VALUES (3, "São Paulo","SP");
+INSERT INTO Cidades VALUES (4, "Campinas","SP");
+INSERT INTO Cidades VALUES (5, "Curitiba","PR");
+INSERT INTO Cidades VALUES (6, "Foz do Iguaçu","PR");
+INSERT INTO Cidades VALUES (7, "Cascavel","PR");
+INSERT INTO Cidades VALUES (8, "São Carlos","SP");
+INSERT INTO Cidades VALUES (9, "Cuiabá", "MT");
+
+INSERT INTO cidades(Nome,UF) VALUES
+
+("Cambé", "PR"),
+("Palmas","PR"),
+("Palmas","TO"),
+("Rio de Janeiro", "RJ"),
+("Ibiporã", "PR"),
+("Bandeirantes","PR"),
+("São Paulo", "SP"),
+("Betim", "MG");
+
+
+SELECT * FROM cidades;
+DESCRIBE categorias;
+
+INSERT INTO categorias (Nome) VALUES 
+
+("Antiácidos"),
+("Relaxantes Musculares"),
+("Diuréticos"),
+("Antidepressivos"),
+("Expectorantes"),
+("Anti-Hemorrágicos"),
+("Anti-Hipertensivos"),
+("Anti-Inflamatórios");
+
+INSERT INTO categorias (Nome) VALUES
+("Suplementos Dieléticos"),
+("Vasodilatadores"),
+("Hipertensores"),
+("Cardiotônicos"),
+("Fármacos para afecções neurovegetativas"),
+("Fármacos retirados do mercado"),
+("Fármacos usados na enxaqueca");
+
+INSERT INTO categorias (Nome) VALUES 
+("Plantas Medicinais"),
+("Anti-infecciosos Sistêmicos"),
+("Anestésicos"),
+("Gastrocinéticos"),
+("Associações medicamentosas");
+
+select * from categorias;
+describe categorias;
+
+INSERT INTO tipos(nome, descricao) VALUES
+("Medicamento Fitoterápico", "É o medicamento feito exclusivamente à base de plantas."),
+("Medicamento Alopático", "É o medicamento feito de substâncias processadas, ou seja, que já passaram por um processo de extração, purificação e síntese."),
+("Medicamento Homeopático","É o medicamento que segue a doutrina da cura pelo semelhante, ou seja, são substâncias capazes de causar sintomas de uma determinada doença no organismo sadio para que o sistema imunológico defenda a doença."),
+("Medicamento Similar","É aquele que apresenta a mesma concentração, forma farmacêutica, via de administração, posologia e indicação terapêutica, preventiva ou diagnóstica, em comparação ao medicamento de referência; podendo diferir somente em características relativas ao tamanho e forma do produto, prazo de validade, embalagem, rotulagem, excipientes e veículos."),
+("Medicamento Genérico", "É o medicamento registrado pelo nome genérico ou químico da substância ativa que o compõe, mas que não possui os testes de biodisponibilidade."),
+("Medicamento de Referencia", "E um protudo inovador, registrado no orgao federal responsavel pela vigilancia sanitaria e comercializado no pais; sua eficacia, seguranca e qaulidade foram comprovados cientificamente pela ANVISA e sao medicamentos com mais de 40 anos de mercado"),
+("Medicamento Manipulado", "E o medicamento produzido em farmacias de manipulcao ou hospitais com recursos para tal pratica, seguindo prescricao medica de acordo com a necessidade individual de cada paciente");
+ 
+ -- select * from tipos;
+ -- describe clientes;
+
+INSERT INTO clientes Values
+(1, "Bernardinho Feira Mar", "1998/10/04", " ", "Av. Ademar Spranger", "890",
+" ", "932.523.069-05", 1, "(43) 1234-2771", "bernardo_MA@email.com", "34.695.044-8");
+
+INSERT INTO clientes Values
+(2, "Enzo Severino", "1975/08/01", "", "Rua Valentina", "756",
+"", "690.755.319-89", 1, "(43) 3808-0703", "severino_nha@email.com", "45.999.208-1");
+
+INSERT INTO clientes Values
+(3, "Valentina Severina Moura", "2003/04/11", "Maria Joana Moura", "Rua Não Vai Ter Golpe", "999",
+"ap 804", "172.941.279-73", 1, "(41) 99764-1676", null, "29.891.642-3");
+
+INSERT INTO clientes Values
+(4, "Jair Inácio Lulanaro", "1995/09/11", null, "Rua e o PT?", "310",
+null, "619.011.269-35", 2, "(41) 3608-4863", "lulanaro_brasil@email.com", "49.171.826-1");
+
+INSERT INTO clientes Values 
+(5, "Heloise Elisa Fátima de Paula", "1995/02/28", null, " Rua Moreira e Costa", "1246", "ap 1502", "157.166.558-74",3,"(11) 2765-7288", "heloise_EFP@email.com","30.553.569-9");
+
+INSERT INTO clientes Values 
+(6, "Cecília Josefa Alessandra Figueiredo", "1948/09/24", null, "Rua Padre Germano Mayer", "671", null, "093.832.519-13", 5, "(41) 99250-9074", "cecilia_JAF@email.com", "21.481.328-9");
+
+INSERT INTO clientes Values
+(7, "Clara Cristiane Bernardes", "1955/08/20", null, "Rua Xingu", "559", null, "283.094.059-87", 6, "(45) 98180-5112", "clara_CC@email.com", "16.564.172-1");
+
+INSERT INTO clientes Values
+(8, "Paulo Elias Giovanni das Neves", "1970/12/19", null, "Rua Severino Honório Batista", "775", null, "625.964.019-67", 9, "(43) 992179148", "paulo_EGHB@email.com", "18.503.229-1");
+
+INSERT INTO clientes Values
+(9, "Lucas Pietro Galvao", "2008/06/15", "Camila Sabrina Galvão", "Rua da Alegria", "817", null, "713.088.399-52", 1, "(43) 99384-4088", null, "45.968.251-9");
+
+INSERT INTO clientes Values
+(10, "Gabriela Isis Farias", "1955/05/17", null, "Rua Capitão Alberto Mendes", "919", null, "476.287.318-72", 8, "(16) 98600-4253", "gabriela.isis@hotmail.com", "24.426.380-2");
+
+INSERT INTO clientes Values
+(11, "Gabriel Eidi Facimoto", "1996/12/08", null, "Rua Baleia do Jonas", "655", null, "084.525.119-60", 1, "(43) 99961-8226", "gabreil.eidi@gmail.com", "25.425.789-1");
+
+describe clientes;
+INSERT INTO clientes Values
+(12, "João Pereira", "1994/08/10", null, "Rua Iugoslávia", "715", null, "091.123.556-70", 3, "(11) 99964-5878", "joao_princesa@trucks.com", "23.654.978-0");
+
+INSERT INTO clientes Values
+(13, "Maria do Bairro Yamamoto", "1975/04/02", null, "Rua SBT", "150", null, "054.567.897-58", 2, "(44) 98765-4578", "maria_dobairro@sbt.com", "58.659.789-89");
+
+INSERT INTO clientes Values 
+(14, "Ernersto Che Trump", "1945/03/14", null, "Rua do Capitalismo", "117", null, "055.658.789-50", 5, "(44) 98465-5612", "che_cuba@yahoo.com", "41.652.478-15");
+
+INSERT INTO clientes Values
+(15, "Pablo Beira-Mar", "1980/08/01", null, "Rua Medelin", "050", null, "017.568.154-20", 7, "(45) 89745-2564", "pablito_patron@colombia.com", "52.456.879-89");
+
+INSERT INTO clientes Values
+(16, "Emerson Xérox", "1990/05/15", null, "Rua das fotocopiadoras", "78", null, "054.569.789-15", 6, "(45) 98178-5678", "emersão@scanner.com.br", "02.569.425-70");
+
+INSERT INTO clientes Values
+(17, "Enzo Valentino Bittencourt", "2010/01/02", "João Guilherme Estrella",  "Rua dos traidores de movimento", "50", null, "084.655.452-78", 5, "(12)9986-8978", "enzo@hotmail.com", "050.452.487-50");
+
+
+INSERT INTO clientes Values
+(18, "Cesar Toshio Tomiyoto", "1991/05/04", null, "Rua Auckland", "45", null, "056.487.568-89", 1, "(43) 99989-8832 ", "czar557@hotmail.com", "060.457.658-89");
+
+INSERT INTO clientes Values
+(19, "Gilberto Hitoshi Da Silva", "1963/08/28", null, "Rua Lino Nardin", "1068", null, "085.569.498-10", 1, "(43) 99901-8366", "giba@outlook.com", "456.689.589-78");
+
+INSERT INTO clientes Values 
+(20, "Regina Koch", "1972/10/05", null, "Rua Tietê", "69", null, "084.659.598-78", 1, "(43) 99927-2757", "regi.est@gmail.com", "564.254.897-78");  
+
+
+-- select * from clientes;
+
+describe laboratorios;
+
+-- ALTER TABLE laboratorios
+-- ADD id_cid int not null;
+
+
+
+
+INSERT INTO laboratorios VALUES
+(1, 2, "ACHÉ LABORATÓRIOS", "Rodovia Presidente Dutra", "KM 222,2", "Parque Industrial", "(11) 2606-6178", "ache@ache.com.br", "http://www.ache.com.br/");
+INSERT INTO laboratorios VALUES
+(2, 1,"BAYER BRASIL", "Estrada da Boa Esperança", "650", "Centro", "(21) 2189-0700", "bayer.brasil@bayer.com.br", "https://www.bayer.com.br");
+INSERT INTO laboratorios VALUES
+(3, 4, "ABL - Antibióticos do Brasil", "Avenida Santo Amaro", "1149", "Edifício Vila Nova Concept", "0800 701 5456", "ablbrasil@ablbrasil.com.br", "http://www.ablbrasil.com.br/");
+INSERT INTO laboratorios VALUES
+(4, 6,"Laboratório Catarinense", "Rua Doutor João Colin", "1053", "América", "0800 47 4222", "catarinensepharma@catarinensepharma.com.br", "http://www.catarinensepharma.com.br/");
+INSERT INTO laboratorios VALUES
+(5, 7,"BioChimico", "Rodovia Presidente Dutra", "KM 310", "América", "(24) 3355-9300", "biochimico@biochimico.com.br", "https://www.biochimico.ind.br/facaparte");
+INSERT INTO laboratorios VALUES
+(6, 1,"EMS - Indústria Farmacêutica", "Rua Comendador Carlo Mario", "450", "", "0800.9418585", "ems@ems.ind.br", "https://www.ems.com.br/index.html");
+INSERT INTO laboratorios VALUES
+(7, 5,"LPM - Laboratório de Produção de Medicamentos", "Avenida Tiradentes", "6565", "Bandeirantes", "(43) 3338-5779", "lpm@lpm.com.br", "https://www.lpm.ind.br/");
+INSERT INTO laboratorios VALUES
+(8, 6,"Geyer", "Rua Pelotas", "320", "Bairro Floresta", "(51) 3092-7200", "geyer@geyer.com.br", "https://www.geyermed.com.br/");
+INSERT INTO laboratorios VALUES
+(9, 8,"Eurofarma", "Av. das Nações Unidas", "22532", null, "(11) 5693-4100", "eurofarma@eurofarma.com.br", "https://www.eurofarma.com.br/");
+INSERT INTO laboratorios VALUES 
+(10, 1,"Laboratório Gross", "Padre Idelfonso Peñalba", "389", null, "0800 70 97 770", "gross@gross.com.br", "http://www.gross.com.br/");
+
+
+DESCRIBE laboratorios;
+
+INSERT INTO funcionarios VALUES
+(1, "Helena Garcia", "1974/08/20", "helena_garcia@empresa.com.br", "993.801.349-08", 3, "(11) 99197-0869", 3125.50, "2000/02/28", "Rua Eustachio Luiz Combe", "654", null, "Casado");
+INSERT INTO funcionarios VALUES
+(2, "Breno Gomes", "1983/05/2", "breno_gomes@empresa.com.br", "936.031.907-42", 1, "(43) 998893423", 2950.00, "2005/10/08", "Rua João XXIII", "1050", "ap 301", "Casado");
+INSERT INTO funcionarios VALUES
+(3, "Jaqueline Rita das NEVES", "1989/02/18", "jaqueline_rita_neves@empresa.com.br", "113.747.088-79", 4, "(19) 98375-4033", 3500.00, "2007/06/24", "Rua Antônio Tadeu Borges Mazzi", "343", "ap 502", "Solteiro");
+INSERT INTO funcionarios VALUES
+(4, "Bryan Arthur Enrico Nogueira", "1993/07/10", "Bryan_nogueira@empresa.com.br", "148.111.838-27", 4, "(19) 98333-4521", 3100.00, "2010/09/11", "Estrada do Sol", "4567", null, "Casado");
+INSERT INTO funcionarios VALUES
+(5, "Kauê Luiz Silveira", "1995/07/10", "kaue_silveira@empresa.com.br", "637.877.088-39", 4, "(19) 99234-9876", 2100.55, "2012/10/15", "Viela Sizenando Rangel", "665", null, "Solteiro");
+INSERT INTO funcionarios VALUES
+(6, "Otávio Benjamin Freitas", "1990/04/10", "otavio_freitas@empresa.com.br", "406.199.729-71", 9, "(43) 98912-4211", 4100.55,"2012/10/15", "Rua Professor Rocha Pombo", "702", null, "Casado");
+INSERT INTO funcionarios VALUES
+(7, "Sueli Priscila Fernandes", "1980/11/28", "sueli_fernandes@empresa.com.br", "551.118.379-22", 10, "(46) 99137-1225", 5000.80, "2003/08/30", "Rua Bispo Dom Carlos", "900", "ap 704", "Casado");
+INSERT INTO funcionarios VALUES
+(8, "Fernanda Vera Márcia Dias", "1979/08/31", "fernanda_dias@empresa.com.br", "576.951.569-60", 1, "(43) 98270-3660", 5500.40, "2000/03/11", "Rua Doutor Dimas de Barros", "999", null, "Divorciado");
+INSERT INTO funcionarios VALUES
+(9, "Ryan Ruan Ferreira", "1989/01/27", "ryan_ferreira@empresa.com.br", "106.806.979-18",1, "(43) 98270-3660", 4500.25, "2003/07/01", "Rua José Daniel Kiellander", "886", null, "Divorciado");
+INSERT INTO funcionarios VALUES
+(10, "Sebastião Francisco Assis", "1979/01/27", "sebastiao_assis@empresa.com.br", "254.314.109-03", 1, "(43) 98386-9731", 4500.25, "1999/06/01", "Praça Manoel B. F. Barbosa", "726", null, "Casado");
+
+INSERT INTO medicamentos 
+(nome, valor, quantidade, id_categoria, id_laboratorio, id_tipo) VALUES
+
+("Pantoprazol 20 mg", 10.06, 100, 1, 1, 5),
+("Label 40 mg/ml", 30.87, 80, 1, 1, 6),
+("Cloridrato de Ranitina 15 mg/ml", 18.57, 90, 1, 1, 4),
+("Flanax 275 mg", 9.01, 150, 8, 2, 6),
+("Flanax 550mg", 34.33, 150, 8, 2, 6),
+("Baycuten N", 27.93, 30, 8, 2, 6),
+("Cadiaspirina 4g", 6.08, 250, 8, 2, 6),
+("Adalat Oros 60 mg", 169.32, 55, 11, 2, 6),
+("Neosaldina 100mg", 15.00, 15, 2, 3, 4), 
+("Novalgina", 12.00, 10, 12, 3, 5),
+("Gelol 200ml", 18.00, 25, 16, 4, 3),
+("Buscopan 100ml", 20.00, 35,  4, 4, 2),
+("AloeVera Naturals", 45.00, 3, 1, 5, 6),
+("Cannadiss React", 120.00, 3, 7, 5, 1),
+("Dorilina", 15.00, 40, 5, 6, 5),
+("GelCap", 18.00, 12, 1, 6, 6),
+("Dorflex Power", 10.00, 20, 5, 7, 5),
+("Anador", 08.00, 45, 5, 7, 2),
+("Tylenol", 25.00, 25, 8, 7, 1),
+("Seiva Avestruz", 1500.00, 12, 10, 8, 2),
+("Protect Sativa", 700.00, 4, 6, 8, 4),
+("Fluoxetina", 120.00, 10, 4, 9, 3),
+("Demogorgon", 15.00, 45, 2, 9, 6),
+("Calcitran B-13", 75.00, 15, 3, 10, 3),
+("Cálcio Duro", 15.00, 2, 3, 10, 6);
+
+-- describe medicamentos;
+-- select * from medicamentos;
+
+	-- 04/09
+
+-- Operadores Relacionais
+
+-- selecionar o nome de todos os registros da tabela de cidades na qual a UF seja "PR"
+
+		select nome from cidades where UF = "PR";
+        
+-- selecionar o nome e o valor de todos os medicamentos com valor superior a r$ 20,00 
+
+		select nome,valor from medicamentos where valor > 20;
+        
+-- OPERADORES LÓGICOS (AND, OR E NOT)
+-- selecionar o nome e o valor de todos os medicamentos com valor superior a r$ 15,00 e inferior a r$ 30,00
+
+		select nome,valor from medicamentos where valor > 15 and valor <30;
+
+-- selecionar o nome e o salário de todos os funcionarios, exceto aquele com salário igual a r$ 4000,00
+
+		select nome,salario from funcionarios where not (salario=4000);
+        
+
+
+CREATE TABLE vendas ( 
+id_venda int not null auto_increment,
+id_cliente int not null,
+id_funcionario int not null,
+data_venda date not null,
+total decimal (6,2),
+foreign key(id_cliente) references clientes (id_cliente),
+foreign key(id_funcionario) references funcionarios(id_funcionario),
+primary key(id_venda)
+);		
+
+CREATE TABLE itens_venda (
+id_venda int not null,
+id_medicamento int not null,
+qtd int,
+valor decimal(6,2),
+foreign key(id_venda) references vendas(id_venda),
+foreign key(id_medicamento) references medicamentos(id_medicamento)
+);	
+
+-- EXERCÍCIO - ADICIONE A CHAVE PRIMÁRIA NA TABELA DE itens_venda
+
+ALTER TABLE itens_venda
+ADD id_itens_venda int not null auto_increment primary key;
+
+-- REMOVA O CAMPO TOTAL DA TABELA DE VENDAS
+
+ALTER TABLE vendas
+DROP total;
+
+
+DESCRIBE vendas;
+
+
+
+-- INSIRA 20 REGISTROS NA TABELA DE vendas 
+INSERT INTO vendas
+(id_venda, id_cliente, id_funcionario, data_venda) VALUES
+(1,1,3, "2019/09/04"),
+(2,2,1, "2019/08/05"),
+(3,3,3, "2019/08/23"),
+(4,4,2, "2019/08/28"),
+(5,5,1, "2019/09/02"),
+(6,6,2,"2019/07/25"),
+(7,7,5,"2019/09/01"),
+(8,8,9,"2019/07/25"),
+(9,9,2,"2019/08/02"),
+(10,10,5,"2019/06/15"),
+(11,11,7,"2019/07/24"),
+(12,12,3,"2019/06/04"),
+(13,13,5,"2019/08/17"),
+(14,14,6,"2019/09/14"),
+(15,15,8,"2019/08/29"),
+(16,16,6,"2019/09/21"),
+(17,17,8,"2019/08/25"),
+(18,18,5,"2019/09/03"),
+(19,19,1,"2019/09/04"),
+(20,12,2,"2019/09/02");
+
+
+DESCRIBE itens_venda;
+-- INSIRA 20 REGISTROS NA TABELA DE itens_venda
+
+INSERT INTO itens_venda 
+(id_venda, id_medicamento, qtd, valor, id_itens_venda) VALUES 
+(1,3,5, 15.50, 1),
+(2,1,6, 45, 2);
+
+INSERT INTO itens_venda 
+(id_venda, id_medicamento, qtd, valor, id_itens_venda) VALUES
+(3,2,4, 85, 3),
+(4,1,2, 42, 4),
+(5,2,8, 12, 5),
+(6,5,3, 90, 6),
+(7,2,4, 11, 7),
+(8,1,6, 15, 8);
+INSERT INTO itens_venda 
+(id_venda, id_medicamento, qtd, valor, id_itens_venda) VALUES
+(9,5,7, 10, 9);
+INSERT INTO itens_venda 
+(id_venda, id_medicamento, qtd, valor, id_itens_venda) VALUES
+(10,6, 17, 15.50, 10);
+INSERT INTO itens_venda 
+(id_venda, id_medicamento, qtd, valor, id_itens_venda) VALUES
+(11,9,25, 25, 11),
+(12,7,12, 22, 12),
+(13,3, 5, 15.00, 13),
+(14, 7, 1, 1.200, 14),
+(15, 9, 2, 150, 15),
+(16, 7, 1, 2.00, 16),
+(17, 3, 5, 15.50, 17),
+(18,1,6, 45, 18),
+(19,1,2, 42, 19),
+(20,2,4, 85, 20); 
+
+select * from itens_venda;
+
+
+
+-- 09/09 
+
+-- SELECIONAR O NOME E O SALÁRIO DE TODOS OS FUNCIONÁRIO QUE TENHAM SALÁRIO IGUAL A R$ 3100,OU R$ 3500,00
+			select nome, salario 
+			from funcionarios
+            where salario = 3100 or 3500;
+
+		
+                
+-- SELECIONAR O NOME DE TODOS OS MEDICAMENTOS EXCETO AQUELES COM VALOR IGUAL A R$ 34,33
+
+			select nome, valor 
+			from medicamentos
+            where not(valor = 34.33);
+            
+            
+ -- SELECIONAR O NOME E O VALOR DE TODOS OS MEDICAMENTOS QUE TENHAM VALOR MENOR DO QUE R$ 10,00 OU MAIOR DO QUE R$ 50,00
+ 
+		select nome, valor 
+		from medicamentos
+        where valor < 10 or valor > 50;
+
+-- SELECIONAR O NOME DE TODAS AS FUNCIONÁRIOS E ORDENÁ-LAS POR NOME
+
+		select nome
+        from funcionarios
+        order by nome;
+        
+--   **** FUNÇÕES DE AGREGAÇÃO  *****
+
+	-- CALCULE A MÉDIA DOS SALÁRIOS DE TODOS OS FUNCIONÁRIOS
+
+	select AVG(salario) 
+    from funcionarios;
+    
+	-- SELECIONAR O MENOR PREÇO DA TABELA DE MEDICAMENTOS  
+    
+    select MIN(valor)
+    from medicamentos;
+    
+    -- SELECIONAR O MAIOR PREÇO DA TABELA DE MEDICAMENTOS
+	
+	select MAX(valor)
+    from medicamentos;
+    
+    -- CALCULAR O VALOR TOTAL DOS PAGAMENTOS DOS FUNCIONÁRIOS 
+    
+	select SUM(salario)
+    from funcionarios;
+    
+    -- SELECIONE QUANTAS CIDADES ESTÃO CADASTRADAS 
+    
+	select count(nome)
+    from cidades;
+    
+    -- SELECIONE QUANTAS CIDADES ESTÃO CADASTRADAS NO ESTADO DO PARANÁ 
+    
+    select count(id_cid)
+    from cidades
+    where UF = "PR";
+
+-- OPERADORES BETWEEN E AND 13/09
+
+	-- SELECIONAR O NOME E O VALOR DE TODOS OS MEDICAMENTOS COM VALOR ENTRE 5 E 10
+    
+    select nome,valor
+    from medicamentos
+    where valor between 5 and 50;
+    
+    -- selecionar o nome de todos clientes com EMAIL NULO
+    
+    select nome
+    from clientes
+    where email is null;
+    
+    -- LIKE 
+    
+    -- selecionar o nome de todas as cidades que iniciem com a letra 'C'
+    
+    select nome
+    from cidades 
+    where nome like 'C%';
+    
+    -- selecionar o nome e a UF de todas as cidades que contenham a substring "ri" no nome 
+    
+    select nome,uf
+    from cidades 
+    where nome like '%ri%';
+    
+    -- RENAME - AS 
+    
+    select sum(salario) AS 'Folha de Pagamento' 
+    from funcionarios;
+    
+    -- OPERADORES COM DATA 
+    
+    -- selecione o nome e a data de nascimento dos funcionários que nasceram no mês 1 
+    
+    select nome, data_nas
+    from funcionarios 
+    where month(data_nas) = 1;
+    
+    describe funcionarios;
+    
+    -- selecione o nome e a data de nascimento dos funcionários que nasceram em 1995 
+    
+    select nome, data_nas
+    from funcionarios 
+    where year(data_nas)= 1995;
+    
+    -- selecione o nome e a data de nascimento dos funcionarios que que fazem aniversário hoje 
+    
+    select nome, data_nas
+    from funcionarios 
+    where month(data_nas) = 09
+    and day (data_nas) = 13;
+    
+    -- elabore 10 enunciados e a seleção sql para o bando de dados farmácia 
+    
+    -- 1) selecione o nome e a data de nascimento dos clientes que nasceram em no ano de 1985
+    select nome, data_nas
+    from clientes
+    where year(data_nas)= 1985;
+    
+    -- 2) selecione o nome e a data de nascimento dos  fclientes que nasceram no mês de agosto
+    
+    select nome, data_nas 
+    from clientes 
+    where month(data_nas)= 08;
+    
+    -- 3) selecione o nome de todos os clientes que tenham "bri" no nome;
+    
+    select nome
+    from clientes
+    where nome like '%bri%';
+    
+    -- 4) selecione o nome de todas as funcionarias chamada "ANA"
+    
+    select nome
+    from funcionarios
+    where nome like '%ana';
+    
+    -- 5) selecione os valores de medicamentos entre 50 e 200
+    
+    select nome, valor 
+    from medicamentos 
+    where valor between 50 and 200;
+    
+    -- 6) selecione os nomes de todos os medicamentos que tenhas "ina" no nome 
+    
+    select nome
+    from medicamentos 
+    where nome like '%ina%';
+    
+    -- 7 )  selecionar o nome e os salarios que variam de 1000 a 5000 da tabela funcionarios
+    
+    select nome,salario
+    from funcionarios
+    where salario between 1000 and 5000;
+    
+    -- 8) selecionar o nome dos clientes que possuem "C" na inicial do nome 
+    
+    select nome
+    from clientes
+    where nome like 'C%';
+    
+    -- 9) selecionar o nome de todos os laboratorios e ordená-lo por ordem alfabética 
+    
+    select nome 
+    from laboratorios 
+     order by nome;
+    
+    -- 10) selecionar o nome de todos os clientes e ordená-lo em decrescente
+	
+    select nome
+    from clientes
+    order by nome desc;
+    
+    -- 16/09 
+    
+    -- UPDATE 
+    
+    describe categorias;
+    
+    update categorias
+	set nome = "Relaxantes Musculares"
+	where id_categoria = 2; 
+    
+    -- ATUALIZAR A DESCRIÇÃO DA TABELA DE CATEGORIAS ONDE O id_categoria é igual a 2 
+    
+    -- ATUALIZAR UM REGISTRO DE CADA TABELA
+    
+    select * from medicamentos;
+    
+    -- 1) atualizar o nome do medicamento Dorflex Power para Dorflex Down
+    
+    update medicamentos
+    set nome = "Dorflex Down"
+    where id_medicamento=17;
+    
+    select * from funcionarios;
+    
+    -- 2) atualizar o sobrenome "Da Silva" na funcionária Helena Garcia 
+    
+    update funcionarios
+    set nome = "Helena Garcia Da Silva"
+    where id_funcionario=1;
+    
+    select * from cidades;
+    
+    -- 3) alterar a cidade de Curitiba para Araucária 
+    
+    update cidades
+    set nome = "Araucária"
+    where id_cid=5;
+    
+    select * from clientes;
+    -- 4) alterar o sobrenome do cliente que possui o id=16 para "Souza"
+    
+    update clientes
+    set nome = "Emerson Souza"
+    where id_cliente=16;
+    
+    select * from tipos;
+   
+   -- 5) alterar o nome do "medicamento manipulado" para "medicamento natural" 
+   update tipos
+   set nome  = "Medicamento Natural" 
+   where id_tipo=7;
+    
+    select * from laboratorios;
+    describe laboratorios;
+    
+    -- 6) atualizar o nome do laboratório "Aché" para "Vish"
+    update laboratorios
+    set nome = "Vish Lab"
+    where id_laboratorio=1;
+    
+    select * from vendas;
+    describe vendas;
+    -- 7) atualizar a data da venda 1 para a data de hoje 
+    
+    update vendas
+    set data_venda="2019/09/16"
+    where id_venda=1;
+    
+    select * from itens_venda;
+    
+    -- 8) alterar o valor do item de venda 3 para 100,00
+    
+    update itens_venda
+    set valor = "100.00"
+    where id_itens_venda=3;
+    
+    
+-- 19/09 
+-- DELETE 
+
+	-- delete from cidades
+	-- where nome="Londrina";
+
+-- comando que desabilita o safe mode
+
+	set sql_safe_updates=0;
+
+-- teste
+	-- delete from cidades
+	-- where nome="Cuiabá";
+    
+    select * from cidades;
+
+-- consultas junção 
+
+describe categorias;
+	-- Selecione a descrição dos medicamentos e o nome de suas respectivas categorias
+    
+    
+    select medicamentos.nome AS medicamentos, categorias.nome AS categorias
+    from medicamentos, categorias
+    where medicamentos.id_categoria=categorias.id_categoria
+    order by  medicamentos.nome;
+    
+    -- selecione o nome dos clientes e o nome de suas respectivas cidades. Ordene a consulta pelo nome dos clientes
+    
+    select clientes.nome as clientes, cidades.nome as cidades
+    from clientes, cidades
+    where clientes.id_cid = cidades.id_cid
+    order by clientes.nome;
+    
+    -- selecione o nome e o salário e a data de contratação e o nome da cidade 
+    describe funcionarios;
+    
+    select funcionarios.nome, datacontratacao, salario, cidades.nome
+    from cidades, funcionarios
+    where cidades.id_cid=funcionarios.id_cid
+    order by funcionarios.nome;
+    
+    
+    -- elaborar 5 enunciados com a junção de tabelas 
+    
+    -- 1) selecione o nome dos laboratorios e suas cidades
+    select laboratorios.nome, cidades.nome
+    from laboratorios, cidades 
+    where laboratorios.id_cid = cidades.id_cid
+    order by laboratorios.nome;
+    
+    
+    
+    describe medicamentos;
+    -- 2) selecione os medicamentos e os laboratorios que fornecem
+    
+    select medicamentos.nome, laboratorios.nome
+    from medicamentos, laboratorios
+    where medicamentos.id_laboratorio = laboratorios.id_laboratorio;
+    
+    describe medicamentos;
+   select * from itens_venda;
+   
+   -- 3) selecione os itens da venda e seus medicamentos 
+   
+   select itens_venda.qtd, medicamentos.nome
+   from itens_venda, medicamentos
+   where itens_venda.id_medicamento = medicamentos.id_medicamento;
+   
+   describe clientes;
+   
+   -- 4) selecione as cidades e seus clientes em modo decrescente
+   
+   select cidades.nome, clientes.nome
+   from  cidades, clientes
+   where clientes.id_cid = cidades.id_cid
+   order by clientes.nome desc;
+   
+   -- 5) selecione o nome dos funcionarios e suas cidades
+   
+    
+    
+   
+   -- describe funcionarios;
+    
+    -- Funções Adicionais 
+    
+    -- o caracter '_' na consulta em conjunto com a cláusula LIKE indica que estamos procurando nomes nos quais a letra A é a segunda letra do nome
+    
+    select nome
+    from funcionarios 
+    where nome 
+    like'_a%';
+    
+    -- left, retorna os primeiros caracteres à esquerda de uma string
+    
+    select left(nome,3)
+    from funcionarios;
+    
+	-- obter uma relação de nomes de funcionários cujos nomes começam com M,N....,Y, OU Z em ordem alfabética:
+    
+    select nome AS 'Funcionários de A a Z'
+    from funcionarios
+    where left(nome,1) >='M'
+    order by nome;
+    
+    -- right retona os últimos caracteres à direita de uma string
+    
+    select right(nome,5)
+    from funcionarios;
+    
+    -- MID - sinônimo de substring. ela pede que você informa em que posição, no meio da string, a contagem deve começar
+    
+    select mid(nome,5,3)
+    from funcionarios;
+    
+    -- buscar o nome das cidades quando à esquerda buscamos os 2 primeiros caracteres, ao meio da terceira letra, buscar os 2 caracteres e ao final
+    -- buscar os ultimos 2 caracteres.
+    
+    select left(nome,2) as 'primeira parte',
+    mid(nome,3,2) as 'parte do meio' ,
+    right(nome,2) as 'ultima parte'
+    from cidades limit 10;
+    
+    
+
+	-- select * from cidades;
+
+
+	-- LENGTH, retorna um valor numérico sobvre o tamanho de um texto pesquisado
+    
+    select length(nome)
+    from funcionarios;
+    
+    -- LOWER, função para manipular os textos e manter todos em caixa baixa
+    
+    select lower(nome)
+    from funcionarios;
+    
+    -- UPPER, contrário de lower
+    
+    select upper(nome)
+    from funcionarios;
+    
+    -- REPLACE, substitui parte de um texto por outro texto
+    
+    select replace (nome,'M.','Maria') 
+    from funcionarios;
+    
+    -- LOCATE - retorna a oposição de um determinado texto dentro de outro texto
+    
+    select locate('P', 'Ana Paula');
+    
+    select locate('P',nome)
+    from funcionarios;
+    
+    -- ORDENA UMA PESQUISA DENTRO DA TABELA FUNCIONÁRIOS POR NOME, EM CUJO TEXTO, TENHA A SUBSTRING '"RI".
+    
+    
+    select locate('ri', nome)
+    from funcionarios
+    order by nome;
+    
+    -- CONCAT - concatena dois textos 
+    
+    select concat(nome, ' - R$', salario)
+    from funcionarios;
+    
+    -- TRIM - remove os espeaços em branco no início e no fim de um texto.
+    
+    select trim('  Tecnologia  ');
+    
+    -- LIMIT, define o número máximo de registros recuperados
+    
+    select nome 
+    from funcionarios
+    limit 5;
+    
+    -- OFFSET, indica o início da leitura, e o limit o máximo de registros a serem lidos
+    
+    select nome 
+    from funcionarios limit 5 offset 3;
+    
+   
+
+-- 25/09 - manipulação de números 
+
+	-- round - arredondamento
+    
+	select round(10.32);
+
+	select round(salario)
+    from funcionarios;
+    
+    select nome, round(salario) as 'salário arredondado',
+    salario as 'salário real' from funcionarios;
+    
+    -- truncate - trunca um determinado número 
+    
+    select truncate(10.32,1);
+    
+    select truncate(salario,1)
+    from funcionarios;
+    
+    -- elabore 5 enunciados com a respectiva consulta sql para o banco de dados Farmácia 
+    
+
+	-- 1) selecione os salários e os nomes dos funcionários retornado em valor numérico, e o salário truncado 3 algarismos
+    
+    select length(nome) as 'nome em valor numérico', truncate(salario,3) as 'salário truncado em 3' 
+    from funcionarios;
+    
+    -- 2) selecione o nome de todos os funcionarios em letras minúsculas e seus respectivos salários arredondados
+    
+    select lower(nome) as 'nome em minúsculo', 
+    round(salario) as 'salário arredondado'
+    from funcionarios;
+    
+    -- 3) concatene o nome de todos os clientes com suas datas de nascimento
+    
+    select concat(nome, '| aniversário: ', data_nas)
+    from clientes;
+    
+   -- 4) selecione a posição da letra G em números nos campos 'nome' da tabela 'clientes'
+   
+   select locate('g', nome)
+    from clientes
+    order by nome;
+    
+    -- 5) utilize a cláusula mid para informar em qual posição deve-se começar a leitura do nome dos medicamentos
+    
+    select mid(nome,2,15)
+    from clientes;
+    
+ 
+	-- sqrt - raiz quadrada
+
+	select sqrt(9);
+    
+    -- sign -- retorna valores positivos, se valor for positivo / negativo se negativo e 0 caso valor seja igual 
+    
+    select sign(1928 - 3293);
+    
+    -- abs - retorna o valor absoluto de uma coluna ou valor 
+    
+    select abs(1928 - 2393);
+    
+    -- mod - retorna o resto da divisão 
+    
+    select mod(395,3);
+    
+    -- MANIPULAÇÃO DE DATAS
+    
+	-- curdate - retorna a data datual 
+    
+    select curdate();
+    
+    select current_date();
+    
+    select curdate() as 'padronizado', curdate() + 0 as 'não padronizado';
+    
+    -- sysdate(getdate) = retorna a data e a hora do sistema 
+    
+    select sysdate();
+    
+    -- now - retorna o momento atual de acordo com o sistema 
+    
+    select now(), sysdate();
+    
+    -- dayname - retorna o nome do dia da semana 
+    
+	select dayname(curdate());
+    
+    -- monthname - retorna o nome do mês 
+    
+    select monthname(curdate());
+    
+    select dayname("1996-09-08");
+    
+    -- apresente o nome do funcionário, o dia da semana e o nome do mês em que cada funcionário nasceu 
+    describe funcionarios;
+    
+	select nome, dayname(data_nas) as 'dia da semana', monthname(data_nas) as 'mês'
+    from funcionarios;
+    
+
+
+-- 30/09 ...
+
+		-- ELABORAR 15 ENUNCIADOS COM SELECTS UTILIZANDO TODOS OS RECURSOS
+        
+        
+		-- 1) -- Selecione o nome de todos os laboratórioss e suas respectivas cidades
+    
+		describe laboratorios;
+    
+    
+		select laboratorios.nome, cidades.nome
+		from laboratorios, cidades
+		where laboratorios.id_cid=cidades.id_cid
+		order by cidades.nome ASC;
+    
+	
+		-- 2) Selecionar todos os clientes de forma decrescente e suas respectivas cidades 
+        
+        describe clientes;
+        
+        select clientes.nome as 'nome do cliente', cidades.nome as 'nome da cidade'
+        from clientes, cidades
+        where clientes.id_cid=cidades.id_cid
+        order by clientes.nome DESC;
+        
+        -- 3) Selecionar todos os CPF's de clientes 
+        
+        select nome, cpf
+        from clientes;
+        
+        -- 4) Selecionar a média salarial de todos os funcionários
+        
+        select AVG(salario)
+        from funcionarios;
+        
+        -- 5) Selecionar os medicamentos e seus tipos 
+        
+        describe medicamentos;
+        describe tipos;
+        
+        select medicamentos.nome, tipos.nome
+        from medicamentos, tipos
+        where medicamentos.id_tipo=tipos.id_tipo
+        order by tipos.nome ASC;
+        
+        -- 6) Selecionar todos os funcionários que tem ganhos entre 1000 e 5000
+        
+        select nome,salario
+        from funcionarios
+        where salario 
+        between 1000 and 5000;
+        
+        -- 7) Selecionar todos os clientes que possuem o nome com a letra G
+        
+        select nome as 'nomes com G'
+        from clientes
+        where nome like '%G%'
+        order by nome ASC;
+        
+        -- 8) Selecionar todos os funcionarios e arredondar todos os salários 
+        
+        select nome, round(salario) as 'salário arredondado'
+        from funcionarios;
+        
+        -- 9) Selecionar o menor salario 
+        
+        select nome, MIN(salario)
+        from funcionarios;
+        
+        -- 10) Selecionar o maior salario 
+        
+        select nome, MAX(salario)
+        from funcionarios;
+        
+        -- 11) Selecionar todos os funcionarios nascidos em 1972
+        
+        select nome 
+        from funcionarios
+        where year(data_nas) = 1975;
+        
+        -- 12) Concatene o nome e o email em apenas um bloco de texto
+        
+      
+		select concat(nome,  '@ : ',  email)
+		from clientes;
+        
+       
+       -- 13) Selecione o nome e a data de nascimento dos funcionarios que fazem aniversário hoje 
+    
+		select nome, data_nas
+		from funcionarios 
+		where month(data_nas) = 09
+		and day (data_nas) = 30;
+        
+        -- 14) selecione o nome e a data de nascimento dos clientes que nasceram em no ano de 1985
+		
+        select nome, data_nas
+		from clientes
+		where year(data_nas)= 1996;
+        
+        -- 15) Selecionar o nome dos funcionários nascidos em 1963
+        
+        select nome, data_nas
+        from funcionarios
+        where year(data_nas) = 1963;
+        
+        
+        -- Apresente a quantidade total de funcionários e o total da folha de pagamento 
+        describe funcionarios;
+        
+				select count(id_funcionario), 
+				sum(salario) -- as 'total da folha de pagamento',
+                from funcionarios;
+                
+		-- selecione o nome e a data de nascimento dos funcionários que nasceram entre 1/1/1980 - 1/1/1990 
+        
+	
+				select nome, data_nas
+                from funcionarios 
+                where year(data_nas) >= '1980' and year(data_nas) <='1989';
+                
+		
+                
+		-- selecione os nomes e as datas de nascimento dos clientes que fazer aniversário no mês de outubro
+    
+        
+				select nome, data_nas
+                from clientes
+                where month(data_nas) = 10;
+                
+		-- mostre a media dos salários dos funcionários
+        
+			select AVG(salario) AS 'média do salário dos funcionários'
+            from funcionarios;
+            
+		-- apresente o menor e o maior salário dos funcionários com estado_civil "casado".
+        
+			select min(salario) as 'menor salário', max(salario) as 'maior salário'
+			from funcionarios 
+			where (estado_civil) = 'casado';
+    
+    -- apresente o nome e o salário dos func que ganham menos de 1500 e mais que 5000
+    
+			select nome, salario 
+            from funcionarios 
+            where (salario) <= 1500 or (salario) <= 5000;
+            
+	-- selecionar todos os clientes que não possuem responsável (null) 
+    
+			select * 
+            from clientes
+            where responsavel is null;
+            
+	-- liste o nome de todos os labs em ordem alfabética 
+    
+			select nome
+            from laboratorios 
+            order by nome;
+            
+	-- apresente a quantidade e a média de valor dos medicamentos com valor acima de 50,00
+    
+ 
+    
+			select AVG(valor) as 'média do valor dos med' , quantidade 
+            from medicamentos
+            where valor >= 50;
+            
+	-- selecione o nome e o salário de todos os funcionários, exceto aqueles que recebem mais de 3000
+    
+			select nome, salario 
+            from funcionarios 
+            where not (salario >= 3000);
+            
+	-- selecione todas as vendas realizadas no mês de setembro de 2019, ordenada por valor 
+    
+			describe vendas;
+            
+            select distinct(data_venda) 
+            from vendas 
+            where month(data_venda)= 9 and year(data_venda)= 2019
+            order by data_venda;
+			
+            
+            
+            -- 30/10 
+            
+            -- FUNÇÕES PARA MANIPULAÇÃO DE DATA 
+            
+            -- DAYOFWEEK 
+            
+            select dayofweek ('2019-10-07');
+            
+            -- DAYOFYEAR
+            
+            select dayofyear('2019-10-07');
+            
+            -- apresente o nome e o dia da semana em que cada funcionário foi contratado
+            
+          
+            select nome, dayofweek(datacontratacao)
+            from funcionarios;
+            
+            -- apresente o nome e o dia do ano em que cada funcionário foi contratado 
+            
+            select nome, dayofyear(datacontratacao)
+            from funcionarios;
+            
+            -- apresente o nome e o dia do mês em que cada funcionário foi contratado
+            
+            select nome, dayofmonth(datacontratacao)
+            from funcionarios;
+            
+            -- DATE_FORMAT 
+            
+            select date_format(curdate(), '%d/%m/%Y');
+            select date_format(curdate(), '%d/%m/%y');
+            
+            
+           -- selecione o nome, e a data de nascimento dos funcionários de forma maior para o menor;
+            
+            select nome, date_format(data_nas, '%d/%m/%Y')
+            as 'data de nascimento'
+            from funcionarios
+            order by data_nas;
+		     
+             
+             select nome, data_nas,
+             date_format(data_nas, '%W') as semana,
+             date_format(data_nas, '%a') as sem_abr,
+             date_format(data_nas, '%M') as mes,
+             date_format(data_nas, '%b') as mes_abr,
+             date_format(data_nas,'%s') as segundo,
+             date_format(data_nas, '%w') as sem_int
+             from funcionarios;
+             
+           --  extract - opções de extração de dia, mês e ano 
+             
+             select extract(day from curdate()) as dia,
+             extract(month from curdate()) as mes,
+             extract(year from curdate()) as ano;
+             
+		  -- adddate - adiciona a uma data um determinado intervalo
+          
+          select adddate(curdate(),20);
+          
+          select adddate(curdate(), interval 20 month);
+          
+          select adddate(curdate(), interval 2 year);
+          
+          -- date_add - adiciona a uma data um determinado intervalo
+          
+          select date_add('2019-10-07 23:59:59', interval 1 day);
+          
+          select date_add(curdate(), interval 1 day);
+          
+          -- subdate - subtrai a uma data um determinado intervalo
+          
+          select subdate('2019--10-07 23:59:59', interval 5 day);
+          
+          select subdate(curdate(), interval 5 day);
+          
+          -- datediff retorna o intervalo entre duas datas
+          
+          select nome, datediff(curdate(), data_nas) as ' data em numeros'
+          from funcionarios;
+          
+          -- last day(data) - pega um valor ou datetime e retorna o valor correspondente para o ultimo dia do mês
+          
+          select last_day('2019-10-07'), last_day('2019-02-29');
+          
+             
+             
+            
+         
